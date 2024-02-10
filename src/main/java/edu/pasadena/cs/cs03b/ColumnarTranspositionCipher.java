@@ -5,12 +5,12 @@ import java.util.Comparator;
 
 
 public class ColumnarTranspositionCipher extends Cipher{
-    //protected String numericKey = "";
+    
     //private String text = "";
-    private StringBuilder encryptedText = new StringBuilder();
-    private StringBuilder decryptedText = new StringBuilder();
-    public ColumnarTranspositionCipher() {
-        
+    protected StringBuilder encryptedText = new StringBuilder();
+    protected StringBuilder decryptedText = new StringBuilder();
+    public ColumnarTranspositionCipher(String numericKey) {
+        this.numericKey = numericKey;
     }
     
     public String getEncryptedText() {
@@ -20,8 +20,16 @@ public class ColumnarTranspositionCipher extends Cipher{
         return this.decryptedText.toString();
     }
 
+    public void verify(String passcode) {
+        if(passcode.equals(numericKey)){
+            System.out.println("Passcode is correct");
+            decrypt();
+        } else {
+            System.out.println("Passcode is incorrect");
+        }
+    }
     @Override
-    public void encrypt(String fileContent, String numericKey) {
+    public void encrypt(String fileContent) {
         // Remove spaces and convert text to upper case for consistency
         fileContent = fileContent.replaceAll("\\s", "_");
     
@@ -65,16 +73,17 @@ public class ColumnarTranspositionCipher extends Cipher{
     // Helper method to get the order of columns based on the key
     private Integer[] getOrderOfKey() {
         // Assuming key is made up of unique numbers for simplicity
-        Integer[] order = new Integer[key.length()];
-        for (int i = 0; i < key.length(); i++) {
-            order[i] = key.charAt(i) - '0';
+        Integer[] order = new Integer[numericKey.length()];
+        for (int i = 0; i < numericKey.length(); i++) {
+            order[i] = numericKey.charAt(i) - '0';
         }
         Arrays.sort(order);
         return order;
     }
 
-    @Override
-    public void decrypt(String numericKey) {
+   
+    public void decrypt() {
+
         this.decryptedText.setLength(0); // Reset the StringBuilder
     
         int cols = numericKey.length();

@@ -1,34 +1,37 @@
 package edu.pasadena.cs.cs03b;
 
+
 import java.util.Random;
-import java.io.BufferedReader;
+
 import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+
 import java.util.Scanner;
 
 public class Cipher {
-    protected String key;
+    protected String numericKey;
+    protected String alphabetsKey;
 
     public Cipher() {
-        this.key = "";
+        this.numericKey = "";
+        this.alphabetsKey = "";
     }
-    public void setKey(String newKey) {
-        this.key = newKey;
+   
+
+    public String getNumericKey() {
+        return numericKey;
     }
-    public String getKey() {
-        return key;
+    public String getAlphabetsKey() {
+        return alphabetsKey;
     }
    
     public static String loadFile(String filename) {
-        StringBuilder content = new StringBuilder(); // 修改这里，创建一个空的StringBuilder
+        StringBuilder content = new StringBuilder(); 
         String filePath = "/workspaces/term-project-cipher-raptors/src/main/java/edu/pasadena/cs/cs03b/" + filename;
         try (Scanner scanner = new Scanner(new File(filePath))) {
             while (scanner.hasNextLine()) {
-                content.append(scanner.nextLine() + "\n"); // 添加换行符，保持原有的段落格式
+                content.append(scanner.nextLine() + "\n"); 
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -36,34 +39,53 @@ public class Cipher {
         return content.toString();
     }
 
-    public String generateRandomKey(int keyLength) {
-        Integer[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; // 使用Integer以支持null值
+    public void generateRandomNumericKey(int keyLength) {
+        Integer[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; 
         Random random = new Random();
 
         StringBuilder keyBuilder = new StringBuilder();
-        int count = 0; // 已生成数字的计数器
+        int count = 0; 
 
         while (count < keyLength) {
-            int index = random.nextInt(10); // 生成0-9之间的随机索引
-            if (numbers[index] != null) { // 检查该索引处的数字是否已被使用
+            int index = random.nextInt(10); 
+            if (numbers[index] != null) { 
                 keyBuilder.append(numbers[index]);
-                numbers[index] = null; // 将使用过的数字设置为null
-                count++; // 增加已生成数字的计数
+                numbers[index] = null; 
+                count++; 
             }
         }
 
-        this.key = keyBuilder.toString();
-        return this.key;
+        this.numericKey = keyBuilder.toString();
     }
     
+    public void generateRandomAlphabetsKey(String numericKey) {
+        Character[] alphabets = new Character[26];
+        for (int i = 0; i < alphabets.length; i++) {
+            alphabets[i] = (char) ('A' + i);
+        }
+        Random random = new Random();
+        StringBuilder keyBuilder = new StringBuilder();
+        int count = 0; 
 
-    public void encrypt(String fileContent, String numericKey) {
+        while (count < numericKey.length()) {
+            int index = random.nextInt(26); 
+            if (alphabets[index] != null) { 
+                keyBuilder.append(alphabets[index]);
+                alphabets[index] = null; 
+                count++; 
+            }
+        }
+
+        this.alphabetsKey = keyBuilder.toString();
+    }
+
+
+
+    public void encrypt(String fileContent) {
         
     }
 
-    public void decrypt(String numericKey) {
-       
-    }
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         /* 
@@ -74,7 +96,7 @@ public class Cipher {
         String file = "Text1.txt";
         String fileContent = loadFile(file);
         System.out.println("Contents of " + file + ":");
-        
+        System.out.println("原文：");
         System.out.println(fileContent);
         
         Cipher cipher = new Cipher();
@@ -84,13 +106,39 @@ public class Cipher {
             System.out.println("Enter the desired key length (5-10):");
         keyLength = scanner.nextInt();
         } while (keyLength < 5 || keyLength > 10);
-        String numericKey = cipher.generateRandomKey(keyLength);
-        System.out.println("Generated key: " + cipher.getKey());
-        ColumnarTranspositionCipher Transposition = new ColumnarTranspositionCipher();
-        Transposition.encrypt(fileContent, numericKey);
+        cipher.generateRandomNumericKey(keyLength);
+        System.out.println("数字码：");
+        System.out.println("Generated key: " + cipher.getNumericKey());
+        ColumnarTranspositionCipher Transposition = new ColumnarTranspositionCipher(cipher.getNumericKey());
+        Transposition.encrypt(fileContent);
+        cipher.generateRandomAlphabetsKey(cipher.getNumericKey());
+        System.out.println("字符码：");
+        System.out.println("Generated key: " + cipher.getAlphabetsKey());
         
         String encrypt = Transposition.getEncryptedText();
-    
+        DoubleTranspositionCipher SecondTransposition = new DoubleTranspositionCipher(cipher.getAlphabetsKey());
+        SecondTransposition.encrypt(Transposition.getEncryptedText());
+        String secondEncrypt = SecondTransposition.getEncryptedText();
+        System.out.println("第一次加密：");
+        System.out.println(encrypt);
+        System.out.println();
+        System.out.println("第二次加密：");
+        System.out.println(secondEncrypt);
+        System.out.println();
+        SecondTransposition.decrypt();
+        String decrypt2 = SecondTransposition.getDecryptedText();
+        System.out.println("第一次解密：");
+        System.out.println(decrypt2);
+        //System.out.println(decrypt2.length());
+        //System.out.println(encrypt.length());
+        if(decrypt2.equals(encrypt) ){
+            Transposition.decrypt();
+        } else {
+            System.out.println("The two decrypted messages are different");
+        }
+        System.out.println();
+        System.out.println("第二次解密，变回原文：");
+        System.out.println(Transposition.getDecryptedText());
 /* 
         int count1 = 0;
         for(int i = 0; i < (int) Math.ceil((double) fileContent.length() / keyLength); i++){
@@ -103,11 +151,12 @@ public class Cipher {
         }
         */
         //System.out.println(encrypt);
-        Transposition.decrypt(numericKey);
-        System.out.println();
+        //System.out.println();
+        //Transposition.decrypt();
+        //System.out.println();
         
-        String decrypt = Transposition.getDecryptedText();
-        System.out.println(decrypt);
+        //String decrypt = Transposition.getDecryptedText();
+        //System.out.println(decrypt);
         
       
         scanner.close();
