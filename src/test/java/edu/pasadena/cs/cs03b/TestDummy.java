@@ -15,7 +15,7 @@ public class TestDummy {
    public void testDummy()
    {
      // action
-     int iResult = Dummy.dummy();
+     int iResult = Cipher.dummy();
      // assertion
      assertEquals(0, iResult);
 
