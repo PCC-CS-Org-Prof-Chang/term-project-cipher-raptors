@@ -9,6 +9,9 @@ public class ColumnarTranspositionCipher extends Cipher{
     //private String text = "";
     protected StringBuilder encryptedText = new StringBuilder();
     protected StringBuilder decryptedText = new StringBuilder();
+    protected char[][] matrix = null;
+    public ColumnarTranspositionCipher() {
+    }
     public ColumnarTranspositionCipher(String numericKey) {
         this.numericKey = numericKey;
     }
@@ -18,6 +21,9 @@ public class ColumnarTranspositionCipher extends Cipher{
     }
     public String getDecryptedText() {
         return this.decryptedText.toString();
+    }
+    public char[][] getMatrix() {
+        return this.matrix;
     }
 
     public void verify(String passcode) {
@@ -39,7 +45,7 @@ public class ColumnarTranspositionCipher extends Cipher{
         int rows = (int) Math.ceil((double) fileContent.length() / cols);
     
         // Initialize the matrix for the Columnar Transposition Cipher
-        char[][] matrix = new char[rows][cols];
+        matrix = new char[rows][cols];
     
         // Fill the matrix with the text characters
         for (int i = 0, k = 0; i < rows; i++) {

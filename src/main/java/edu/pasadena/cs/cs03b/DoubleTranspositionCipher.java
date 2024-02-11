@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
 
+    public DoubleTranspositionCipher() {
+    }
     public DoubleTranspositionCipher(String alphabetsKey) {
         super(alphabetsKey);
     }
@@ -17,7 +19,7 @@ public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
         int cols = numericKey.length();
         int rows = (int) Math.ceil((double) fileContent.length() / cols);
 
-        char[][] matrix = new char[rows][cols];
+        this.matrix = new char[rows][cols];
 
         for (int i = 0, k = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
