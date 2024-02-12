@@ -277,8 +277,8 @@ public class Cipher {
                         }
 
                     }
-                    System.out.println(SecondTransposition.encryptedText.length());
-                    System.out.println(FirstTransposition.encryptedText.length());
+                    //System.out.println(SecondTransposition.encryptedText.length());
+                    //System.out.println(FirstTransposition.encryptedText.length());
                     break;
                 case 2: // 解密
                     System.out.println("\nYou choose to decrypt. Please enter the Alphabet key for decryption.\n");
