@@ -2,7 +2,6 @@ package edu.pasadena.cs.cs03b;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import java.util.List;
 
 public class KnownPlaintextAttack extends BruteForceAttack {

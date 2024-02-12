@@ -1,7 +1,6 @@
 package edu.pasadena.cs.cs03b;
 
 import java.util.LinkedList;
-
 import java.util.Queue;
 
 public class BruteForceAttack extends Cipher {
