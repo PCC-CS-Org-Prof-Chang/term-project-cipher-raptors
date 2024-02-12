@@ -2,61 +2,73 @@ package edu.pasadena.cs.cs03b;
 
 import java.util.Arrays;
 
-
 public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
 
     public DoubleTranspositionCipher() {
     }
+
     public DoubleTranspositionCipher(String alphabetsKey) {
-        super(alphabetsKey);
+        this.alphabetsKey = alphabetsKey;
     }
 
-    
     @Override
-    public void encrypt(String fileContent) {
-        fileContent = fileContent.replaceAll("\\s", "_");
+    protected Boolean verify(String AlphabetsKey) {
+        Boolean result = true;
+        if (this.alphabetsKey.equals(AlphabetsKey)) {
+            System.out.println("Alphabet Key is correct.\n");
+            decrypt(AlphabetsKey);
+        } else {
+            System.out.println("Alphabet Key is incorrect.\n");
+            result = false;
+        }
+        return result;
+    }
 
-        int cols = numericKey.length();
-        int rows = (int) Math.ceil((double) fileContent.length() / cols);
-
+    @Override
+    public void encrypt(String Firstencryption) {
+        int cols = alphabetsKey.length();
+        int rows = (int) Math.ceil((double) Firstencryption.length() / cols);
+    
         this.matrix = new char[rows][cols];
-
+    
         for (int i = 0, k = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                matrix[i][j] = (k < fileContent.length()) ? fileContent.charAt(k++) : '_';
+                if (k < Firstencryption.length()) {
+                    matrix[i][j] = Firstencryption.charAt(k++);
+                } else {
+                    matrix[i][j] = '_'; // 仅在需要时添加填充字符
+                }
             }
         }
-
-        // Convert alphabetic key to positions ('A' = 0, 'B' = 1, ..., 'Z' = 25)
+    
         int[] keyPositions = new int[cols];
         for (int i = 0; i < cols; i++) {
-            keyPositions[i] = numericKey.toUpperCase().charAt(i) - 'A';
+            keyPositions[i] = alphabetsKey.charAt(i) - 'A';
         }
-
-        // Sort the key positions to get the order of columns
+    
         Integer[] sortedIndices = new Integer[cols];
         for (int i = 0; i < cols; i++) {
             sortedIndices[i] = i;
         }
         Arrays.sort(sortedIndices, (a, b) -> Integer.compare(keyPositions[a], keyPositions[b]));
-
-        // Read the columns based on the sorted order
-        encryptedText.setLength(0); // Clear the previous encrypted text
+    
+        encryptedText.setLength(0);
         for (int k : sortedIndices) {
             for (int row = 0; row < rows; row++) {
                 encryptedText.append(matrix[row][k]);
             }
         }
     }
+
     @Override
-    public void decrypt() {
+    public void decrypt(String alphabetsKey) {
         // First decryption (reversing the second transposition)
-        super.decrypt();
-        for(int i = 0; i < this.decryptedText.length(); i++){
-            if(decryptedText.charAt(i) == ' '){
+        super.decrypt(alphabetsKey);
+        for (int i = 0; i < this.decryptedText.length(); i++) {
+            if (decryptedText.charAt(i) == ' ') {
                 decryptedText.setCharAt(i, '_');
             }
         }
-        
+
     }
 }
