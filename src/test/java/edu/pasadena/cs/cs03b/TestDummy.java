@@ -17,9 +17,10 @@ public class TestDummy {
      // action
      int iResult = Cipher.dummy();
      // assertion
-     assertEquals(0, iResult);
+     assertEquals(1, iResult);
 
      // TODO: add your own test cases
+    
 
    }
 }

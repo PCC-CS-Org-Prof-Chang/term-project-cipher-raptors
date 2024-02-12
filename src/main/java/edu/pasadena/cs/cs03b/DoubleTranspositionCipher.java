@@ -19,6 +19,7 @@ public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
             decrypt(AlphabetsKey);
         } else {
             System.out.println("Alphabet Key is incorrect.\n");
+
             result = false;
         }
         return result;
@@ -28,9 +29,9 @@ public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
     public void encrypt(String Firstencryption) {
         int cols = alphabetsKey.length();
         int rows = (int) Math.ceil((double) Firstencryption.length() / cols);
-    
+
         this.matrix = new char[rows][cols];
-    
+
         for (int i = 0, k = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (k < Firstencryption.length()) {
@@ -40,18 +41,18 @@ public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
                 }
             }
         }
-    
+
         int[] keyPositions = new int[cols];
         for (int i = 0; i < cols; i++) {
             keyPositions[i] = alphabetsKey.charAt(i) - 'A';
         }
-    
+
         Integer[] sortedIndices = new Integer[cols];
         for (int i = 0; i < cols; i++) {
             sortedIndices[i] = i;
         }
         Arrays.sort(sortedIndices, (a, b) -> Integer.compare(keyPositions[a], keyPositions[b]));
-    
+
         encryptedText.setLength(0);
         for (int k : sortedIndices) {
             for (int row = 0; row < rows; row++) {
