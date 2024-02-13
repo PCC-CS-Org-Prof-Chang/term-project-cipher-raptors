@@ -33,10 +33,10 @@ public class ColumnarTranspositionCipher extends Cipher {
     protected Boolean verify(String numericKey) {
         Boolean result = true;
         if (this.numericKey.equals(numericKey)) {
-            System.out.println("Numeric Key is correct.\n");
+            System.out.println(numericKey + " is correct.\n");
             decrypt(numericKey);
         } else {
-            System.out.println("Numeric Key is incorrect.\n");
+            System.out.println(numericKey + " is incorrect.\n");
             result = false;
         }
         return result;

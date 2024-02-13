@@ -15,10 +15,10 @@ public class DoubleTranspositionCipher extends ColumnarTranspositionCipher {
     protected Boolean verify(String AlphabetsKey) {
         Boolean result = true;
         if (this.alphabetsKey.equals(AlphabetsKey)) {
-            System.out.println("Alphabet Key is correct.\n");
+            System.out.println(AlphabetsKey + " is correct.\n");
             decrypt(AlphabetsKey);
         } else {
-            System.out.println("Alphabet Key is incorrect.\n");
+            System.out.println(AlphabetsKey + " is incorrect.\n");
 
             result = false;
         }
