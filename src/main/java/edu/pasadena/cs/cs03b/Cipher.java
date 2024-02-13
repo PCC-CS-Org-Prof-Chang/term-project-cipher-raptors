@@ -72,17 +72,26 @@ public class Cipher {
 
     public static String loadFile(String filename) {
         StringBuilder content = new StringBuilder();
-        String filePath = "/workspaces/term-project-cipher-raptors/src/main/java/edu/pasadena/cs/cs03b/" + filename;
-        try (Scanner scanner = new Scanner(new File(filePath))) {
+        
+        String filePath = "src/main/java/edu/pasadena/cs/cs03b/" + filename; 
+        
+       
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("File does not exist: " + filePath);
+            return ""; 
+        }
+        
+        try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
-                content.append(scanner.nextLine() + "\n");
+                content.append(scanner.nextLine()).append("\n");
             }
         } catch (FileNotFoundException e) {
+            
             System.out.println("File not found: " + e.getMessage());
         }
         return content.toString();
     }
-
     Boolean verify(String decryptFiles) {
         String original = this.fileContent.trim();
         String decrypted = decryptFiles.trim();
@@ -141,7 +150,7 @@ public class Cipher {
 
     }
 
-    public static void printnMatrix(char[][] encryption, String keyWord) {
+    public static void printMatrix(char[][] encryption, String keyWord) {
         char[][] matrix = encryption;
 
         int rows = matrix.length;
@@ -246,7 +255,17 @@ public class Cipher {
                             case 1:
                                 System.out.println("\nGenerated numeric key: " + cipher.getNumericKey() + ".");
                                 System.out.println("\nEncryption：");
-                                printnMatrix(FirstTransposition.getMatrix(), cipher.getNumericKey());
+
+                                
+                                
+
+
+                                if (FirstTransposition.getMatrix() != null && FirstTransposition.getMatrix().length > 0 && FirstTransposition.getMatrix()[0].length > 0) {
+                                    printMatrix(FirstTransposition.getMatrix(), cipher.getNumericKey());
+                                } else {
+                                    System.out.println("The encryption matrix for the first transposition is empty or not initialized properly.");
+                                }
+                                //printMatrix(FirstTransposition.getMatrix(), cipher.getNumericKey());
                                 System.out.println("\nFirst Encrypted Text: " + FirstTransposition.getEncryptedText());
                                 break;
                             case 2:
@@ -269,7 +288,7 @@ public class Cipher {
                                             System.out.println(
                                                     "\nGenerated Alphabet key: " + cipher.getAlphabetsKey() + ".");
                                             System.out.println("\nEncryption：");
-                                            printnMatrix(SecondTransposition.getMatrix(), cipher.getAlphabetsKey());
+                                            printMatrix(SecondTransposition.getMatrix(), cipher.getAlphabetsKey());
                                             System.out.println("\nSecond Encrypted Text: "
                                                     + SecondTransposition.getEncryptedText());
                                             break;
