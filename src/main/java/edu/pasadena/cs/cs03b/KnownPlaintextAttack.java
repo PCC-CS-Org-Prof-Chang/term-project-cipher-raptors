@@ -86,7 +86,7 @@ public class KnownPlaintextAttack extends BruteForceAttack {
                     return false;
             }
         }
-        return true; 
+        return true;
     }
 
     public void deduceColumnOrder(String horizontal, String vertical, int columns, String type) {
