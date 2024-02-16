@@ -71,7 +71,7 @@ public class Cipher {
         return keyLength;
     }
 
-    public static String loadFile(String filename) {
+    public String loadFile(String filename) {
         StringBuilder content = new StringBuilder();
 
         String filePath = "src/main/java/edu/pasadena/cs/cs03b/" + filename;
@@ -151,7 +151,7 @@ public class Cipher {
 
     }
 
-    public static void printMatrix(char[][] encryption, String keyWord) {
+    public void printMatrix(char[][] encryption, String keyWord) {
         char[][] matrix = encryption;
 
         int rows = matrix.length;
@@ -212,7 +212,7 @@ public class Cipher {
                 exit = true;
                 System.out.println("Exiting program.");
             } else {
-                fileContent = loadFile(filename);
+                fileContent = cipher.loadFile(filename);
                 if (!fileContent.isEmpty()) {
                     cipher.setFileContent(fileContent);
 
@@ -270,7 +270,7 @@ public class Cipher {
                                 System.out.println("\nEncryption:");
                                 if (FirstTransposition.getMatrix() != null && FirstTransposition.getMatrix().length > 0
                                         && FirstTransposition.getMatrix()[0].length > 0) {
-                                    printMatrix(FirstTransposition.getMatrix(), cipher.getNumericKey());
+                                    cipher.printMatrix(FirstTransposition.getMatrix(), cipher.getNumericKey());
                                 } else {
                                     System.out.println(
                                             "The encryption matrix for the first transposition is empty or not initialized properly.");
@@ -281,7 +281,7 @@ public class Cipher {
                             case 2:
 
                                 cipher.generateRandomAlphabetsKey(cipher.getNumericKey());
-                                // System.out.println("Generated key: " + cipher.getAlphabetsKey());
+                                
                                 SecondTransposition = new DoubleTranspositionCipher(cipher.getAlphabetsKey());
                                 SecondTransposition.encrypt(FirstTransposition.getEncryptedText());
                                 boolean returnToPreviousMenu = false;
@@ -298,7 +298,7 @@ public class Cipher {
                                             System.out.println(
                                                     "\nGenerated Alphabet key: " + cipher.getAlphabetsKey() + ".");
                                             System.out.println("\nEncryption:");
-                                            printMatrix(SecondTransposition.getMatrix(), cipher.getAlphabetsKey());
+                                            cipher.printMatrix(SecondTransposition.getMatrix(), cipher.getAlphabetsKey());
                                             System.out.println("\nSecond Encrypted Text: "
                                                     + SecondTransposition.getEncryptedText());
                                             break;
